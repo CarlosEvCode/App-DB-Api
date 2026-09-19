@@ -11,6 +11,7 @@
 /.idea/deviceManager.xml
 /.idea/shelf
 /.idea/jarRepositories.xml
+/.idea/vcs.xml
 .DS_Store
 /build
 /captures
