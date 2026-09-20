@@ -1,9 +1,11 @@
 package com.example.applistas;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +15,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -23,6 +26,7 @@ public class BuscadorPersonaje extends AppCompatActivity {
     RequestQueue requestQueue;
     final String URL ="https://dragonball-api.com/api/characters/";
     EditText edtIdPersonaje, edtNombre, edtKi, edtRaza, edtGenero;
+    ImageView imgPersonaje;
     Button btnBuscaPersonaje;
 
     private void loadUI(){
@@ -31,6 +35,7 @@ public class BuscadorPersonaje extends AppCompatActivity {
         edtKi = findViewById(R.id.edtKi);
         edtRaza = findViewById(R.id.edtRaza);
         edtGenero = findViewById(R.id.edtGenero);
+        imgPersonaje = findViewById(R.id.imgPersonaje);
 
         btnBuscaPersonaje = findViewById(R.id.btnBuscarPersonaje);
     }
@@ -40,6 +45,7 @@ public class BuscadorPersonaje extends AppCompatActivity {
         edtKi.setText("");
         edtRaza.setText("");
         edtGenero.setText("");
+        imgPersonaje.setImageDrawable(null);
     }
 
     @Override
@@ -95,9 +101,26 @@ public class BuscadorPersonaje extends AppCompatActivity {
             edtKi.setText(jsonObject.getString("ki"));
             edtRaza.setText(jsonObject.getString("race"));
             edtGenero.setText(jsonObject.getString("gender"));
+
+            //Cargar imagen del personaje
+            String urlImagen = jsonObject.getString("image");
+            cargarImagen(urlImagen);
         }catch (Exception e){
             Log.e("ErrorJSON", e.toString());
         }
+    }
+
+    private void cargarImagen(String urlImagen){
+        ImageRequest imageRequest = new ImageRequest(
+                urlImagen,
+                bitmap -> imgPersonaje.setImageBitmap(bitmap),
+                0,
+                0,
+                ImageView.ScaleType.FIT_CENTER,
+                Bitmap.Config.RGB_565,
+                error -> Log.e("ErrorImagen", error.toString())
+        );
+        requestQueue.add(imageRequest);
     }
 
     //this.errowWS() se activa con respuestas 4XX

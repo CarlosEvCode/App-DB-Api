@@ -22,9 +22,17 @@
     <Button
         android:id="@+id/btnBuscarPersonaje"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:text="Buscar" />
+
+    <ImageView
+        android:id="@+id/imgPersonaje"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        android:layout_marginVertical="10dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Imagen del personaje" />
 
     <LinearLayout
         android:orientation="vertical"
