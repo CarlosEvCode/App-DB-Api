@@ -130,17 +130,20 @@ public class BuscadorPersonaje extends AppCompatActivity {
     }
 
     private void mostrarTransformaciones() {
-        StringBuilder sb = new StringBuilder("Transformaciones:\n");
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < listaTransformaciones.length(); i++) {
             try {
                 JSONObject trans = listaTransformaciones.getJSONObject(i);
-                sb.append("• ").append(trans.getString("name")).append("\n");
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append(trans.getString("name"));
             } catch (JSONException e) {
                 Log.e("ErrorJSON", e.toString());
             }
         }
 
-        Toast.makeText(getApplicationContext(), sb.toString().trim(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     private void cargarImagen(String urlImagen){
