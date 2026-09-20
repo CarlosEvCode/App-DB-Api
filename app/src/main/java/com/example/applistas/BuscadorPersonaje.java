@@ -3,6 +3,7 @@ package com.example.applistas;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +29,8 @@ public class BuscadorPersonaje extends AppCompatActivity {
     final String URL ="https://dragonball-api.com/api/characters/";
     EditText edtIdPersonaje, edtNombre, edtKi, edtRaza, edtGenero;
     ImageView imgPersonaje;
-    Button btnBuscaPersonaje;
+    Button btnBuscaPersonaje, btnTransformaciones;
+    JSONArray listaTransformaciones;
 
     private void loadUI(){
         edtIdPersonaje = findViewById(R.id.edtIdPersonaje);
@@ -38,6 +41,7 @@ public class BuscadorPersonaje extends AppCompatActivity {
         imgPersonaje = findViewById(R.id.imgPersonaje);
 
         btnBuscaPersonaje = findViewById(R.id.btnBuscarPersonaje);
+        btnTransformaciones = findViewById(R.id.btnTransformaciones);
     }
 
     private void resetUI(){
@@ -46,6 +50,8 @@ public class BuscadorPersonaje extends AppCompatActivity {
         edtRaza.setText("");
         edtGenero.setText("");
         imgPersonaje.setImageDrawable(null);
+        btnTransformaciones.setVisibility(View.GONE);
+        listaTransformaciones = null;
     }
 
     @Override
@@ -58,6 +64,7 @@ public class BuscadorPersonaje extends AppCompatActivity {
 
         //Eventos
         btnBuscaPersonaje.setOnClickListener(v -> {getDataCharacter();});
+        btnTransformaciones.setOnClickListener(v -> {mostrarTransformaciones();});
     }//OnCreate
 
     private void getDataCharacter(){
@@ -105,9 +112,35 @@ public class BuscadorPersonaje extends AppCompatActivity {
             //Cargar imagen del personaje
             String urlImagen = jsonObject.getString("image");
             cargarImagen(urlImagen);
+
+            //Verificar si tiene transformaciones
+            if (jsonObject.has("transformations")) {
+                listaTransformaciones = jsonObject.getJSONArray("transformations");
+                if (listaTransformaciones.length() > 0) {
+                    btnTransformaciones.setVisibility(View.VISIBLE);
+                } else {
+                    btnTransformaciones.setVisibility(View.GONE);
+                }
+            } else {
+                btnTransformaciones.setVisibility(View.GONE);
+            }
         }catch (Exception e){
             Log.e("ErrorJSON", e.toString());
         }
+    }
+
+    private void mostrarTransformaciones() {
+        StringBuilder sb = new StringBuilder("Transformaciones:\n");
+        for (int i = 0; i < listaTransformaciones.length(); i++) {
+            try {
+                JSONObject trans = listaTransformaciones.getJSONObject(i);
+                sb.append("• ").append(trans.getString("name")).append("\n");
+            } catch (JSONException e) {
+                Log.e("ErrorJSON", e.toString());
+            }
+        }
+
+        Toast.makeText(getApplicationContext(), sb.toString().trim(), Toast.LENGTH_LONG).show();
     }
 
     private void cargarImagen(String urlImagen){

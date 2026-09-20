@@ -34,6 +34,13 @@
         android:scaleType="fitCenter"
         android:contentDescription="Imagen del personaje" />
 
+    <Button
+        android:id="@+id/btnTransformaciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Ver transformaciones" />
+
     <LinearLayout
         android:orientation="vertical"
         android:gravity="bottom"
