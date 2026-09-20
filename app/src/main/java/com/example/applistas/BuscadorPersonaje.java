@@ -34,6 +34,14 @@ public class BuscadorPersonaje extends AppCompatActivity {
 
         btnBuscaPersonaje = findViewById(R.id.btnBuscarPersonaje);
     }
+
+    private void resetUI(){
+        edtNombre.setText("");
+        edtKi.setText("");
+        edtRaza.setText("");
+        edtGenero.setText("");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +61,9 @@ public class BuscadorPersonaje extends AppCompatActivity {
             edtIdPersonaje.requestFocus();
             return;
         }
+
+        //Reiniciar cajas antes de la nueva busqueda
+        resetUI();
 
         String endPoint = URL + edtIdPersonaje.getText().toString(); //Se agrega el id
         //Abrir canal de comunicacion
@@ -94,6 +105,9 @@ public class BuscadorPersonaje extends AppCompatActivity {
 
         //Log.e("ErrorWS", e.toString());
 
+        //Limpiar interfaz si ocurrio un error
+        resetUI();
+
         //Para gestionar errores, necesitamos de un objeto
         NetworkResponse response = e.networkResponse;
 
@@ -103,18 +117,22 @@ public class BuscadorPersonaje extends AppCompatActivity {
             int statusCode = response.statusCode;
 
             //No lo encontramos
-            if (statusCode == 400){
+            if (statusCode == 400 || statusCode == 404){
                 String dataError = new String(response.data);
                 try {
                     JSONObject jsonError = new JSONObject(dataError);
-                    Toast.makeText(getApplicationContext(),jsonError.getString("message"), Toast.LENGTH_LONG);
+                    String mensaje = jsonError.optString("message", "Personaje no encontrado");
+                    Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
                     Log.e("ErrorWS", dataError);
                 } catch (JSONException ex) {
-                    throw new RuntimeException(ex);
+                    Toast.makeText(getApplicationContext(), "Personaje no encontrado", Toast.LENGTH_LONG).show();
+                    Log.e("ErrorWS", ex.toString());
                 }
 
             }
             //Log.e("ErrorWS",String.valueOf(statusCode));
+        } else {
+            Toast.makeText(getApplicationContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
         }
     }
 
