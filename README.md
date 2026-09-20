@@ -8,7 +8,8 @@ Aplicacion movil para Android desarrollada en Java que consume la API publica de
 - Consumo de servicios REST con peticiones asincronas mediante la libreria Volley.
 - Descarga y visualizacion dinamica de imagenes de personajes utilizando ImageRequest.
 - Parseo y visualizacion de datos: nombre, nivel de ki, raza y genero.
-- Validacion de entrada y control de errores HTTP
+- Visualizacion de transformaciones del personaje mediante cuadro de dialogo (AlertDialog).
+- Validacion de entrada y control de errores HTTP.
 - Limpieza y reinicio automatico de campos en cada consulta.
 
 ## Tecnologias utilizadas
