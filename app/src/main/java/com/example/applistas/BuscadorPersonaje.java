@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
@@ -134,16 +135,17 @@ public class BuscadorPersonaje extends AppCompatActivity {
         for (int i = 0; i < listaTransformaciones.length(); i++) {
             try {
                 JSONObject trans = listaTransformaciones.getJSONObject(i);
-                if (i > 0) {
-                    sb.append(", ");
-                }
-                sb.append(trans.getString("name"));
+                sb.append("• ").append(trans.getString("name")).append("\n");
             } catch (JSONException e) {
                 Log.e("ErrorJSON", e.toString());
             }
         }
 
-        Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
+        new AlertDialog.Builder(this)
+                .setTitle("Transformaciones")
+                .setMessage(sb.toString().trim())
+                .setPositiveButton("Aceptar", null)
+                .show();
     }
 
     private void cargarImagen(String urlImagen){
