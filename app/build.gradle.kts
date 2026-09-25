@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    implementation(libs.viewpager2)
     implementation(libs.volley)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
